@@ -1,52 +1,60 @@
-# Warranty Manager
+# Nuxt Starter Template
 
-A modern, responsive web application designed to streamline product warranty claims. Built with Nuxt 4, it provides a seamless interface for customers to submit claims and for staff to manage them through a role-based workflow.
+[![Nuxt UI](https://img.shields.io/badge/Made%20with-Nuxt%20UI-00DC82?logo=nuxt&labelColor=020420)](https://ui.nuxt.com)
 
-## 🚀 Overview
+Use this template to get started with [Nuxt UI](https://ui.nuxt.com) quickly.
 
-The **Warranty Manager** replaces manual email-based processes with a structured portal. It centralizes warranty requests, manages claim statuses, and notifies the technical team automatically, with future plans for ERP integration (Sage 100).
+- [Live demo](https://starter-template.nuxt.dev/)
+- [Documentation](https://ui.nuxt.com/docs/getting-started/installation/nuxt)
 
-## 🛠 Tech Stack
+<a href="https://starter-template.nuxt.dev/" target="_blank">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png">
+    <img alt="Nuxt Starter Template" src="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png">
+  </picture>
+</a>
 
-- **Frontend:** [Nuxt 4](https://nuxt.com/) (Vue.js)
-- **UI Components:** [Nuxt UI](https://ui.nuxt.com/) (Tailwind CSS)
-- **Backend-as-a-Service:** [Supabase](https://supabase.com/) (PostgreSQL & Auth)
-- **Email Service:** [Resend](https://resend.com/) (API-based notifications)
-- **Deployment:** [Vercel](https://vercel.com/)
+> The starter template for Vue is on https://github.com/nuxt-ui-templates/starter-vue.
 
-## 👥 User Roles & Permissions
+## Quick Start
 
-| Role | Description |
-| :--- | :--- |
-| **Customer** | Submit new claims and track their own request history. |
-| **Sales Rep** | View all claims to assist customers; can edit details but not change statuses. |
-| **Tech Support** | Manage the full lifecycle of a claim (CRUD) and update statuses. |
-| **Admin** | Full system access, including user management and system settings. |
+```bash [Terminal]
+npm create nuxt@latest -- -t github:nuxt-ui-templates/starter
+```
 
-## 🏗 Database Schema (MVP)
+## Deploy your own
 
-The application uses a relational PostgreSQL database (via Supabase) with the following core entities:
-- `profiles`: User data linked to authentication roles.
-- `warranties`: Core claim data (Product ref, serial number, description, photos).
-- `status`: Claim workflow states (Pending, Received, Under Review, Validated, Rejected).
-- `products`: Local cache of product references for improved UX.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-name=starter&repository-url=https%3A%2F%2Fgithub.com%2Fnuxt-ui-templates%2Fstarter&demo-image=https%3A%2F%2Fui.nuxt.com%2Fassets%2Ftemplates%2Fnuxt%2Fstarter-dark.png&demo-url=https%3A%2F%2Fstarter-template.nuxt.dev%2F&demo-title=Nuxt%20Starter%20Template&demo-description=A%20minimal%20template%20to%20get%20started%20with%20Nuxt%20UI.)
 
-## 🛣 Roadmap
+## Setup
 
-- [ ] **Phase 1:** MVP with Form submission, Supabase storage, and Email notifications (Resend).
-- [ ] **Phase 2:** Advanced Dashboard for Tech/Sales teams with filters.
-- [ ] **Phase 3:** Spare parts management and "Recycled Parts" inventory.
-- [ ] **Phase 4:** Sage 100 ERP Integration (automated credit notes and exchanges).
-- [ ] **Phase 5:** Excel/CSV bulk import for product lists.
+Make sure to install the dependencies:
 
-## 🔧 Getting Started
+```bash
+pnpm install
+```
 
-### Prerequisites
-- Node.js (latest LTS)
-- A Supabase project and API keys
-- A Resend API key
+## Development Server
 
-### Installation
-1. Clone the repository:
-   ```bash
-   git clone [https://github.com/your-username/warranty-manager.git](https://github.com/your-username/warranty-manager.git)
+Start the development server on `http://localhost:3000`:
+
+```bash
+pnpm dev
+```
+
+## Production
+
+Build the application for production:
+
+```bash
+pnpm build
+```
+
+Locally preview production build:
+
+```bash
+pnpm preview
+```
+
+Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
