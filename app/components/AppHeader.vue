@@ -80,17 +80,18 @@ const logout = async () => {
           @click="logout"
         />
 
-        <UDropdown
+        <div
           v-if="user"
-          :items="[links, [{ label: 'Déconnexion', icon: 'i-heroicons-power', click: logout }]]"
           class="lg:hidden"
         >
           <UButton
+            label="Menu"
             icon="i-heroicons-bars-3"
-            color="info"
+            color="gray"
             variant="ghost"
+            @click="navigateTo('/dashboard')"
           />
-        </UDropdown>
+        </div>
       </div>
     </template>
   </UHeader>

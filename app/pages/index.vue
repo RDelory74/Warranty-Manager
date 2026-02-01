@@ -19,7 +19,7 @@ const user = useSupabaseUser()
           to="/warranty/new"
           size="xl"
           icon="i-heroicons-plus-circle"
-          label="Nouvelle Demande SAV"
+          label="Demande SAV"
         />
         <UButton
           v-else
@@ -43,7 +43,10 @@ const user = useSupabaseUser()
       <UCard>
         <template #header>
           <div class="flex items-center gap-2">
-            <UIcon name="i-heroicons-clock" class="w-6 h-6 text-primary" />
+            <UIcon
+              name="i-heroicons-clock"
+              class="w-6 h-6 text-primary"
+            />
             <h3 class="font-semibold">
               Suivi en temps réel
             </h3>
@@ -55,7 +58,10 @@ const user = useSupabaseUser()
       <UCard>
         <template #header>
           <div class="flex items-center gap-2">
-            <UIcon name="i-heroicons-wrench-screwdriver" class="w-6 h-6 text-primary" />
+            <UIcon
+              name="i-heroicons-wrench-screwdriver"
+              class="w-6 h-6 text-primary"
+            />
             <h3 class="font-semibold">
               Pièces Détachées
             </h3>
@@ -67,7 +73,10 @@ const user = useSupabaseUser()
       <UCard>
         <template #header>
           <div class="flex items-center gap-2">
-            <UIcon name="i-heroicons-device-phone-mobile" class="w-6 h-6 text-primary" />
+            <UIcon
+              name="i-heroicons-device-phone-mobile"
+              class="w-6 h-6 text-primary"
+            />
             <h3 class="font-semibold">
               Interface Mobile
             </h3>
