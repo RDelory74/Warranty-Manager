@@ -9,6 +9,9 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
+  runtimeConfig: {
+    resendApiKey: process.env.RESEND_API_KEY // accessible uniquement côté serveur
+  },
   srcDir: 'app/',
 
   // routeRules: {
