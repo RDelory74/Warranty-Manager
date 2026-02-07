@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const supabase = useSupabaseClient()
-const user = useSupabaseUser()
+
 const router = useRouter()
 
 const loading = ref(false)
@@ -95,14 +95,14 @@ const submitTicket = async () => {
           photoUrls: photoUrls
         }
       })
-    } catch (e) {
+    } catch (_e) {
       console.error('L\'email n\'a pas pu être envoyé, mais le ticket est créé.')
     }
     alert('Demande enregistrée avec succès !')
     router.push('/dashboard/dashboard')
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error)
-    alert(`Erreur: ${error.message}`)
+    alert(`Erreur: ${(error as any).message}`)
   } finally {
     loading.value = false
   }

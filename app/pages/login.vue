@@ -9,7 +9,7 @@ const handleSignUp = async () => {
   loading.value = true
   message.value = 'Inscription en cours...'
 
-  const { data, error } = await supabase.auth.signUp({
+  const { data: _data, error } = await supabase.auth.signUp({
     email: email.value,
     password: password.value
   })

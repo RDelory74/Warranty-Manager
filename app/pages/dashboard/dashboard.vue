@@ -1,9 +1,8 @@
 <script setup lang="ts">
 const client = useSupabaseClient()
-const user = useSupabaseUser()
 
 // État pour stocker les tickets
-const { data: tickets, refresh } = await useAsyncData('tickets', async () => {
+const { data: tickets, refresh: _refresh } = await useAsyncData('tickets', async () => {
   const { data } = await client
     .from('tickets')
     .select('*')
