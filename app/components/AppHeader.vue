@@ -68,10 +68,11 @@ const links = computed<NavigationMenuItem[]>(() => {
         to="/"
         class="flex items-center gap-2"
       >
-        <UIcon
-          name="i-heroicons-shield-check"
-          class="w-8 h-8 text-primary"
-        />
+        <img
+          src="/logo-warr-manager.png"
+          alt="Warranty Manager Logo"
+          class="h-8 w-auto rounded-full object-contain"
+        >
         <span class="font-bold text-xl hidden sm:block">Warranty Manager</span>
       </NuxtLink>
     </template>
