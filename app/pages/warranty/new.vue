@@ -47,12 +47,14 @@
     for (const file of files.value) {
       const fileExt = file.name.split('.').pop()
       const fileName = `${Math.random()}.${fileExt}`
-      // Utilisation du currentUser.id vérifié
       const filePath = `${currentUser.id}/${fileName}`
 
+      // CORRECTION ICI : l'objet upsert doit être DANS les parenthèses
       const { error: uploadError } = await supabase.storage
         .from('tickets-photos')
-        .upload(filePath, file)
+        .upload(filePath, file, {
+          upsert: true
+        })
 
       if (uploadError) throw uploadError
 
@@ -63,7 +65,7 @@
       photoUrls.push(urlData.publicUrl)
     }
 
-    // 2. Insertion BDD avec l'ID utilisateur explicite
+    // 2. Insertion BDD
     const { error: dbError } = await supabase
       .from('tickets')
       .insert({
@@ -73,17 +75,18 @@
         product_name: form.value.product_name,
         product_problem: form.value.product_problem,
         quantity: form.value.quantity,
-        purchase_date: form.value.purchase_date || null,
-        requested_solution: form.value.requested_solution,
+        // Sécurité : si la date est vide, on envoie null pour éviter une erreur SQL
+        purchase_date: form.value.purchase_date === '' ? null : form.value.purchase_date,
+        requested_solution: form.value.requested_solution as 'Reparation' | 'Echange' | 'Avoir' | 'Refus' | 'Envoi pieces detachees',
         comments: form.value.comments,
         photo_urls: photoUrls,
-        user_id: currentUser.id // On force l'ID ici
+        user_id: currentUser.id
       })
 
     if (dbError) throw dbError
 
     alert('Demande enregistrée avec succès !')
-    router.push('/')
+    router.push('/dashboard/dashboard') 
   } catch (error: any) {
     console.error(error)
     alert(`Erreur: ${error.message}`)
