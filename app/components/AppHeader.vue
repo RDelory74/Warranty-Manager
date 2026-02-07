@@ -1,31 +1,64 @@
 <script setup lang="ts">
+import type { NavigationMenuItem } from '@nuxt/ui'
+
 const client = useSupabaseClient()
 const user = useSupabaseUser()
+const route = useRoute()
 
-// Liens de navigation pour les utilisateurs connectés
-const links = [
-  {
-    label: 'Nouveau SAV',
-    icon: 'i-heroicons-plus-circle',
-    to: '/warranty/new'
-  },
-  {
-    label: 'Pièces',
-    icon: 'i-heroicons-cog-6-tooth',
-    to: '/parts'
-  },
-  {
-    label: 'Mon compte',
-    icon: 'i-heroicons-user',
-    to: '/dashboard'
-  }
-]
-
-// Fonction de déconnexion
+// Actions
 const logout = async () => {
   await client.auth.signOut()
   navigateTo('/login')
 }
+
+// Toute la logique de navigation centralisée
+const links = computed<NavigationMenuItem[]>(() => {
+  if (user.value) {
+    // Menu pour les utilisateurs connectés
+    return [
+      {
+        label: 'Nouveau SAV',
+        icon: 'i-heroicons-plus-circle',
+        to: '/warranty/new',
+        active: route.path === '/warranty/new'
+      },
+      {
+        label: 'Pièces',
+        icon: 'i-heroicons-cog-6-tooth',
+        to: '/parts/parts',
+        active: route.path.startsWith('/parts/parts')
+      },
+      {
+        label: 'Mon compte',
+        icon: 'i-heroicons-user',
+        to: '/dashboard/dashboard',
+        active: route.path === '/dashboard/dashboard'
+      },
+      {
+        label: 'Déconnexion',
+        icon: 'i-heroicons-power',
+        onSelect: logout,
+        class: 'text-warning-500 hover:text-warning-600 font-bold'
+      }
+    ]
+  } else {
+    // Menu pour les visiteurs (Non connectés)
+    return [
+      {
+        label: 'Connexion',
+        icon: 'i-heroicons-arrow-left-on-rectangle',
+        to: '/login',
+        active: route.path === '/login'
+      },
+      {
+        label: 'S\'enregistrer',
+        icon: 'i-heroicons-user-plus',
+        to: '/login', // Ou ton lien spécifique register
+        class: 'text-primary-500 font-bold'
+      }
+    ]
+  }
+})
 </script>
 
 <template>
@@ -44,55 +77,19 @@ const logout = async () => {
     </template>
 
     <template #right>
-      <div
-        v-if="!user"
-        class="flex items-center gap-x-2"
-      >
-        <UButton
-          to="/login"
-          label="Connexion"
-          icon="i-heroicons-arrow-left-on-rectangle"
-          color="info"
-          variant="ghost"
-        />
-        <UButton
-          to="/login"
-          label="S'enregistrer"
-          color="primary"
-        />
-      </div>
+      <UNavigationMenu
+        :items="links"
+        variant="pill"
+        class="hidden lg:flex"
+      />
+    </template>
 
-      <div
-        v-else
-        class="flex items-center gap-x-4"
-      >
-        <UNavigationMenu
-          :items="links"
-          class="hidden lg:flex"
-        />
-
-        <UButton
-          icon="i-heroicons-power"
-          color="warning"
-          variant="soft"
-          label="Déconnexion"
-          class="hidden sm:flex"
-          @click="logout"
-        />
-
-        <div
-          v-if="user"
-          class="lg:hidden"
-        >
-          <UButton
-            label="Menu"
-            icon="i-heroicons-bars-3"
-            color="gray"
-            variant="ghost"
-            @click="navigateTo('/dashboard')"
-          />
-        </div>
-      </div>
+    <template #body>
+      <UNavigationMenu
+        :items="links"
+        orientation="vertical"
+        class="-mx-2.5"
+      />
     </template>
   </UHeader>
 </template>

@@ -35,6 +35,78 @@ export type Database = {
         }
         Relationships: []
       }
+      tickets: {
+        Row: {
+          comments: string | null
+          created_at: string | null
+          customer_name: string
+          customer_phone: string | null
+          display_ref: string | null
+          final_solution: Database['public']['Enums']['ticket_solution'] | null
+          id: string
+          incremental_id: number
+          photo_urls: string[] | null
+          product_name: string
+          product_problem: string
+          product_ref: string
+          purchase_date: string | null
+          quantity: number | null
+          requested_solution:
+            | Database['public']['Enums']['ticket_solution']
+            | null
+          status: Database['public']['Enums']['ticket_status'] | null
+          status_history: Json | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          comments?: string | null
+          created_at?: string | null
+          customer_name: string
+          customer_phone?: string | null
+          display_ref?: string | null
+          final_solution?: Database['public']['Enums']['ticket_solution'] | null
+          id?: string
+          incremental_id?: number
+          photo_urls?: string[] | null
+          product_name: string
+          product_problem: string
+          product_ref: string
+          purchase_date?: string | null
+          quantity?: number | null
+          requested_solution?:
+            | Database['public']['Enums']['ticket_solution']
+            | null
+          status?: Database['public']['Enums']['ticket_status'] | null
+          status_history?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          comments?: string | null
+          created_at?: string | null
+          customer_name?: string
+          customer_phone?: string | null
+          display_ref?: string | null
+          final_solution?: Database['public']['Enums']['ticket_solution'] | null
+          id?: string
+          incremental_id?: number
+          photo_urls?: string[] | null
+          product_name?: string
+          product_problem?: string
+          product_ref?: string
+          purchase_date?: string | null
+          quantity?: number | null
+          requested_solution?:
+            | Database['public']['Enums']['ticket_solution']
+            | null
+          status?: Database['public']['Enums']['ticket_status'] | null
+          status_history?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -43,7 +115,25 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      user_role: 'Client' | 'Commercial' | 'TechnicienSav' | 'Admin'
+      ticket_solution:
+        | 'Echange'
+        | 'Avoir'
+        | 'Reparation'
+        | 'Refus'
+        | 'Envoi pieces detachees'
+      ticket_status:
+        | 'Nouveau'
+        | 'En cours'
+        | 'En attente piece'
+        | 'Termine'
+        | 'Annule'
+      user_role:
+        | 'Client'
+        | 'Commercial'
+        | 'TechnicienSav'
+        | 'Admin'
+        | 'commercial'
+        | 'technicien'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -171,7 +261,28 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      user_role: ['Client', 'Commercial', 'TechnicienSav', 'Admin']
+      ticket_solution: [
+        'Echange',
+        'Avoir',
+        'Reparation',
+        'Refus',
+        'Envoi pieces detachees'
+      ],
+      ticket_status: [
+        'Nouveau',
+        'En cours',
+        'En attente piece',
+        'Termine',
+        'Annule'
+      ],
+      user_role: [
+        'Client',
+        'Commercial',
+        'TechnicienSav',
+        'Admin',
+        'commercial',
+        'technicien'
+      ]
     }
   }
 } as const

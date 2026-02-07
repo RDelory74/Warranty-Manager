@@ -1,52 +1,63 @@
-<template>
-  <UContainer class="py-10">
-    <div class="mb-8">
-      <h1 class="text-3xl font-bold">
-        Tableau de bord
-      </h1>
-      <p class="text-gray-500">
-        Bienvenue, {{ profile?.full_name || user?.email }}
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <UCard v-if="isClient">
-        <template #header>
-          Mes Garanties
-        </template>
-        <p class="mb-4">
-          Vous avez 0 dossier en cours.
-        </p>
-        <UButton
-          to="/warranty/new"
-          icon="i-heroicons-plus"
-        >
-          Créer un SAV
-        </UButton>
-      </UCard>
-
-      <UCard v-if="isStaff">
-        <template #header>
-          Gestion SAV (Staff)
-        </template>
-        <p>Dossiers à traiter : 12</p>
-        <UButton
-          color="orange"
-          variant="soft"
-          class="mt-4"
-        >
-          Voir la file d'attente
-        </UButton>
-      </UCard>
-    </div>
-  </UContainer>
-</template>
-
 <script setup lang="ts">
+const client = useSupabaseClient()
 const user = useSupabaseUser()
-const { profile, isClient, isStaff, fetchProfile } = useProfile()
 
-onMounted(() => {
-  fetchProfile()
+// État pour stocker les tickets
+const { data: tickets, refresh } = await useAsyncData('tickets', async () => {
+  const { data } = await client
+    .from('tickets')
+    .select('*')
+    .order('created_at', { ascending: false })
+  return data
 })
 </script>
+
+<template>
+  <UContainer class="py-8">
+    <UPageHeader
+      title="Mon compte"
+      description="Suivez l'état de vos demandes de SAV en temps réel."
+      class="mb-8"
+    />
+
+    <div
+      v-if="tickets?.length"
+      class="grid gap-4"
+    >
+      <UCard
+        v-for="ticket in tickets"
+        :key="ticket.id"
+      >
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="font-bold text-lg">
+              {{ ticket.product_name }}
+            </p>
+            <p class="text-sm text-gray-500">
+              Réf: {{ ticket.product_ref }} - Client: {{ ticket.customer_name }}
+            </p>
+          </div>
+          <UBadge
+            :label="ticket.status || 'Nouveau'"
+            color="primary"
+            variant="subtle"
+          />
+        </div>
+      </UCard>
+    </div>
+
+    <UCard
+      v-else
+      class="text-center py-10"
+    >
+      <p class="text-gray-500">
+        Aucune demande trouvée.
+      </p>
+      <UButton
+        to="/warranty/new"
+        label="Créer ma première demande"
+        class="mt-4"
+      />
+    </UCard>
+  </UContainer>
+</template>
