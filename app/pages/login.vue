@@ -1,82 +1,121 @@
 <script setup lang="ts">
+import { z } from 'zod'
+import type { FormSubmitEvent } from '#ui/types'
+
 const supabase = useSupabaseClient()
-const email = ref('')
-const password = ref('')
+const router = useRouter()
 const loading = ref(false)
-const message = ref('')
+const errorMessage = ref('')
 
-const handleSignUp = async () => {
+// On garde Zod pour la validation, c'est plus propre
+const schema = z.object({
+  email: z.string().email('Email invalide'),
+  password: z.string().min(1, 'Mot de passe requis')
+})
+
+type Schema = z.output<typeof schema>
+
+const state = reactive({
+  email: '',
+  password: ''
+})
+
+const handleLogin = async (event: FormSubmitEvent<Schema>) => {
   loading.value = true
-  message.value = 'Inscription en cours...'
+  errorMessage.value = ''
 
-  const { data: _data, error } = await supabase.auth.signUp({
-    email: email.value,
-    password: password.value
+  const { error } = await supabase.auth.signInWithPassword({
+    email: event.data.email,
+    password: event.data.password
   })
 
   if (error) {
-    message.value = `Erreur : ${error.message}`
+    errorMessage.value = 'Identifiants incorrects'
   } else {
-    message.value = 'Succès ! Vérifie tes emails pour confirmer, puis regarde ta table "profiles" dans Supabase.'
+    // Redirection vers l'accueil ou le dashboard
+    router.push('/')
   }
-  loading.value = false
-}
-
-const handleLogin = async () => {
-  loading.value = true
-  const { error } = await supabase.auth.signInWithPassword({
-    email: email.value,
-    password: password.value
-  })
-  if (error) alert(error.message)
-  else navigateTo('/')
   loading.value = false
 }
 </script>
 
 <template>
-  <div class="max-w-md mx-auto mt-20 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl">
-    <h1 class="text-2xl font-bold mb-6 text-center">
-      Connexion / Inscription
-    </h1>
-
-    <div class="space-y-4">
-      <input
-        v-model="email"
-        type="email"
-        placeholder="Email"
-        class="w-full p-2 border rounded dark:bg-gray-700"
+  <UContainer class="flex flex-col justify-center items-center min-h-[80vh] gap-4">
+    <div class="w-full max-w-md">
+      <UButton
+        icon="i-heroicons-arrow-left"
+        variant="ghost"
+        color="info"
+        to="/"
       >
-      <input
-        v-model="password"
-        type="password"
-        placeholder="Mot de passe"
-        class="w-full p-2 border rounded dark:bg-gray-700"
-      >
+        Retour au menu
+      </UButton>
+    </div>
 
-      <div class="flex gap-2">
-        <button
-          :disabled="loading"
-          class="flex-1 bg-primary-500 text-white p-2 rounded hover:bg-primary-600"
-          @click="handleLogin"
+    <UCard class="w-full max-w-md shadow-xl">
+      <template #header>
+        <h1 class="text-2xl font-bold text-center">
+          Connexion
+        </h1>
+      </template>
+
+      <UForm
+        :schema="schema"
+        :state="state"
+        class="space-y-4"
+        @submit="handleLogin"
+      >
+        <UFormField
+          label="Email"
+          name="email"
+        >
+          <UInput
+            v-model="state.email"
+            placeholder="votre@email.com"
+            icon="i-heroicons-envelope"
+          />
+        </UFormField>
+
+        <UFormField
+          label="Mot de passe"
+          name="password"
+        >
+          <UInput
+            v-model="state.password"
+            type="password"
+            icon="i-heroicons-lock-closed"
+          />
+        </UFormField>
+
+        <UAlert
+          v-if="errorMessage"
+          color="error"
+          variant="soft"
+          icon="i-heroicons-exclamation-triangle"
+          :title="errorMessage"
+        />
+
+        <UButton
+          type="submit"
+          block
+          :loading="loading"
+          color="primary"
         >
           Se connecter
-        </button>
-        <button
-          :disabled="loading"
-          class="flex-1 bg-gray-500 text-white p-2 rounded hover:bg-gray-600"
-          @click="handleSignUp"
-        >
-          S'inscrire
-        </button>
-      </div>
+        </UButton>
+      </UForm>
 
-      <p
-        v-if="message"
-        class="text-sm text-center mt-4 text-primary-500 font-medium italic"
-      >
-        {{ message }}
-      </p>
-    </div>
-  </div>
+      <template #footer>
+        <p class="text-sm text-center">
+          Nouveau ici ?
+          <ULink
+            to="/signup"
+            class="text-primary font-medium hover:underline"
+          >
+            Créer un compte
+          </ULink>
+        </p>
+      </template>
+    </UCard>
+  </UContainer>
 </template>

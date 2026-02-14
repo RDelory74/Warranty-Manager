@@ -53,7 +53,8 @@ const links = computed<NavigationMenuItem[]>(() => {
       {
         label: 'S\'enregistrer',
         icon: 'i-heroicons-user-plus',
-        to: '/login', // Ou ton lien spécifique register
+        to: '/signup', // Ou ton lien spécifique register
+        active: route.path === '/signup',
         class: 'text-primary-500 font-bold'
       }
     ]
