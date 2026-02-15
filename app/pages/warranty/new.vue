@@ -19,7 +19,7 @@ const form = ref({
   comments: ''
 })
 
-const solutionOptions = ['Echange', 'Avoir', 'Reparation', 'Refus', 'Envoi pieces detachees']
+const solutionOptions = ['Echange', 'Avoir', 'Reparation', 'Envoi pieces detachees']
 
 const handleFileChange = (e: Event) => {
   const target = e.target as HTMLInputElement
@@ -77,7 +77,7 @@ const submitTicket = async () => {
         quantity: form.value.quantity,
         // Sécurité : si la date est vide, on envoie null pour éviter une erreur SQL
         purchase_date: form.value.purchase_date === '' ? null : form.value.purchase_date,
-        requested_solution: form.value.requested_solution as 'Reparation' | 'Echange' | 'Avoir' | 'Refus' | 'Envoi pieces detachees',
+        requested_solution: form.value.requested_solution as 'Reparation' | 'Echange' | 'Avoir' | 'Envoi pieces detachees',
         comments: form.value.comments,
         photo_urls: photoUrls,
         user_id: currentUser.id
@@ -173,7 +173,7 @@ const submitTicket = async () => {
           />
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 relative z-20">
           <div class="flex flex-col gap-1.5">
             <label class="text-sm font-medium text-gray-700 dark:text-gray-200">Date d'achat</label>
             <UInput
@@ -182,15 +182,20 @@ const submitTicket = async () => {
             />
           </div>
           <div class="flex flex-col gap-1.5">
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-200">Solution souhaitée</label>
-            <USelect
+            <label class="text-sm font-medium text-gray-700 dark:text-gray-200">
+              Solution souhaitée
+            </label>
+            <USelectMenu
               v-model="form.requested_solution"
-              :options="solutionOptions"
+              :items="solutionOptions"
+              :searchable="false"
+              placeholder="Sélectionnez une solution"
+              class="w-full"
             />
           </div>
         </div>
 
-        <div class="flex flex-col gap-1.5 border-t border-gray-100 dark:border-gray-800 pt-4">
+        <div class="flex flex-col gap-1.5 border-t border-gray-100 dark:border-gray-800 pt-4 relative z-10">
           <label class="text-sm font-medium text-gray-700 dark:text-gray-200 text-primary-500">Photos du défaut (Max 3)</label>
           <input
             type="file"
