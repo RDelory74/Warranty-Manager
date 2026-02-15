@@ -50,3 +50,7 @@ The application uses a relational PostgreSQL database (via Supabase) with the fo
 1. Clone the repository:
    ```bash
    git clone [https://github.com/your-username/warranty-manager.git](https://github.com/your-username/warranty-manager.git)
+
+### Connection Client : 
+   ID:rodolphe.test3@gmail.com
+   PSWD:123456Aa

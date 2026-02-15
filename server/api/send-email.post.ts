@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
           </ul>
 
           <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-          <a href="https://ton-site.vercel.app/dashboard" style="background-color: #2563eb; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Accéder au Dashboard</a>
+          <a href="https://https://warranty-manager-seven.vercel.app/dashboard/dashboard" style="background-color: #2563eb; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Accéder au Dashboard</a>
         </div>
       `
     })
