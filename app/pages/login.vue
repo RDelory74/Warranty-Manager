@@ -73,6 +73,8 @@ const handleLogin = async (event: FormSubmitEvent<Schema>) => {
             v-model="state.email"
             placeholder="votre@email.com"
             icon="i-heroicons-envelope"
+            size="lg"
+            class="w-full"
           />
         </UFormField>
 
@@ -84,6 +86,8 @@ const handleLogin = async (event: FormSubmitEvent<Schema>) => {
             v-model="state.password"
             type="password"
             icon="i-heroicons-lock-closed"
+            size="lg"
+            class="w-full"
           />
         </UFormField>
 

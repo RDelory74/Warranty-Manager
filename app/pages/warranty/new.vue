@@ -188,7 +188,7 @@ const submitTicket = async () => {
             <USelectMenu
               v-model="form.requested_solution"
               :items="solutionOptions"
-              :searchable="false"
+              :searchInput="false"
               placeholder="Sélectionnez une solution"
               class="w-full"
             />
