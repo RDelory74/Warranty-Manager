@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   // ACTIVER LE MODE NUXT 4
 
-  modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxtjs/supabase'],
+  modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxtjs/supabase', '@pinia/nuxt'],
 
   devtools: {
     enabled: true
