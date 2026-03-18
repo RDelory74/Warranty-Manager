@@ -14,26 +14,180 @@ export type Database = {
   }
   public: {
     Tables: {
+      invitation_keys: {
+        Row: {
+          created_by: string | null
+          expires_at: string | null
+          id: string
+          is_used: boolean | null
+          key: string
+          organization_id: string | null
+          role_assigned: Database['public']['Enums']['membership_role']
+        }
+        Insert: {
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          is_used?: boolean | null
+          key: string
+          organization_id?: string | null
+          role_assigned: Database['public']['Enums']['membership_role']
+        }
+        Update: {
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          is_used?: boolean | null
+          key?: string
+          organization_id?: string | null
+          role_assigned?: Database['public']['Enums']['membership_role']
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'invitation_keys_created_by_fkey'
+            columns: ['created_by']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'invitation_keys_organization_id_fkey'
+            columns: ['organization_id']
+            isOneToOne: false
+            referencedRelation: 'organizations'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+      memberships: {
+        Row: {
+          id: string
+          joined_at: string | null
+          organization_id: string | null
+          profile_id: string | null
+          role: Database['public']['Enums']['membership_role']
+        }
+        Insert: {
+          id?: string
+          joined_at?: string | null
+          organization_id?: string | null
+          profile_id?: string | null
+          role: Database['public']['Enums']['membership_role']
+        }
+        Update: {
+          id?: string
+          joined_at?: string | null
+          organization_id?: string | null
+          profile_id?: string | null
+          role?: Database['public']['Enums']['membership_role']
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'memberships_organization_id_fkey'
+            columns: ['organization_id']
+            isOneToOne: false
+            referencedRelation: 'organizations'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'memberships_profile_id_fkey'
+            columns: ['profile_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+      organizations: {
+        Row: {
+          brands: string[] | null
+          created_at: string | null
+          id: string
+          name: string
+          owner_id: string | null
+        }
+        Insert: {
+          brands?: string[] | null
+          created_at?: string | null
+          id?: string
+          name: string
+          owner_id?: string | null
+        }
+        Update: {
+          brands?: string[] | null
+          created_at?: string | null
+          id?: string
+          name?: string
+          owner_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'organizations_owner_id_fkey'
+            columns: ['owner_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          }
+        ]
+      }
       profiles: {
         Row: {
+          company_name: string | null
+          customer_code: string | null
           email: string | null
           full_name: string | null
           id: string
           role: Database['public']['Enums']['user_role']
         }
         Insert: {
+          company_name?: string | null
+          customer_code?: string | null
           email?: string | null
           full_name?: string | null
           id: string
           role?: Database['public']['Enums']['user_role']
         }
         Update: {
+          company_name?: string | null
+          customer_code?: string | null
           email?: string | null
           full_name?: string | null
           id?: string
           role?: Database['public']['Enums']['user_role']
         }
         Relationships: []
+      }
+      spare_parts_lists: {
+        Row: {
+          created_at: string | null
+          id: string
+          items: Json | null
+          name: string
+          organization_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          items?: Json | null
+          name: string
+          organization_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          items?: Json | null
+          name?: string
+          organization_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'spare_parts_lists_organization_id_fkey'
+            columns: ['organization_id']
+            isOneToOne: false
+            referencedRelation: 'organizations'
+            referencedColumns: ['id']
+          }
+        ]
       }
       tickets: {
         Row: {
@@ -45,6 +199,7 @@ export type Database = {
           final_solution: Database['public']['Enums']['ticket_solution'] | null
           id: string
           incremental_id: number
+          organization_id: string | null
           photo_urls: string[] | null
           product_name: string
           product_problem: string
@@ -68,6 +223,7 @@ export type Database = {
           final_solution?: Database['public']['Enums']['ticket_solution'] | null
           id?: string
           incremental_id?: number
+          organization_id?: string | null
           photo_urls?: string[] | null
           product_name: string
           product_problem: string
@@ -91,6 +247,7 @@ export type Database = {
           final_solution?: Database['public']['Enums']['ticket_solution'] | null
           id?: string
           incremental_id?: number
+          organization_id?: string | null
           photo_urls?: string[] | null
           product_name?: string
           product_problem?: string
@@ -105,7 +262,15 @@ export type Database = {
           updated_at?: string | null
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'tickets_organization_id_fkey'
+            columns: ['organization_id']
+            isOneToOne: false
+            referencedRelation: 'organizations'
+            referencedColumns: ['id']
+          }
+        ]
       }
     }
     Views: {
@@ -115,6 +280,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      membership_role: 'technician' | 'commercial' | 'customer'
       ticket_solution:
         | 'Echange'
         | 'Avoir'
@@ -261,6 +427,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      membership_role: ['technician', 'commercial', 'customer'],
       ticket_solution: [
         'Echange',
         'Avoir',
