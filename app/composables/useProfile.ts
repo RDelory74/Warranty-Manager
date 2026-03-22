@@ -1,40 +1,25 @@
+// app/composables/useProfile.ts
 export const useProfile = () => {
-  const supabase = useSupabaseClient()
-  const user = useSupabaseUser()
-  // Utilisation de useState pour partager l'état du profil entre tous les composants
-  const profile = useState('user-profile', () => null)
+  const orgStore = useOrgStore()
 
-  const fetchProfile = async () => {
-    if (!user.value) {
-      profile.value = null
-      return null
-    }
+  // On crée des raccourcis vers le store
+  const profile = computed(() => orgStore.profile)
+  const currentOrg = computed(() => orgStore.activeOrg)
 
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', user.value.id)
-      .single()
-
-    if (!error) {
-      profile.value = data
-    }
-    return data
-  }
-
-  // Helpers pour vérifier les droits d'accès facilement dans les pages
+  // On met à jour la logique des rôles pour qu'elle soit dynamique
+  // Elle regarde maintenant le rôle de l'organisation SELECTIONNÉE
   const roleCheck = {
-    isClient: computed(() => profile.value?.role === 'client'),
-    isCommercial: computed(() => profile.value?.role === 'commercial'),
-    isTechnicien: computed(() => profile.value?.role === 'technicien'),
-    isAdmin: computed(() => profile.value?.role === 'admin'),
-    // Rôle "Staff" (tous ceux qui ne sont pas clients)
-    isStaff: computed(() => ['commercial', 'technicien', 'admin'].includes(profile.value?.role))
+    isAdmin: computed(() => orgStore.activeRole === 'admin'),
+    isTechnicien: computed(() => orgStore.activeRole === 'technician'),
+    isClient: computed(() => orgStore.activeRole === 'client'),
+    // Utile pour l'affichage conditionnel dans le menu
+    hasSelectedOrg: computed(() => !!orgStore.currentOrgId)
   }
 
   return {
     profile,
-    fetchProfile,
-    ...roleCheck
+    currentOrg,
+    ...roleCheck,
+    fetchProfile: orgStore.fetchMemberships // On réutilise l'action du store
   }
 }

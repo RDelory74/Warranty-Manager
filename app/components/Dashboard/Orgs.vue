@@ -3,32 +3,35 @@ const orgStore = useOrgStore()
 </script>
 
 <template>
-  <section>
-    <p class="text-[10px] font-black text-gray-400 uppercase tracking-tighter mb-4">
+  <section class="space-y-4">
+    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
       Mes Organisations
     </p>
-    <div class="grid grid-cols-1 gap-2">
-      <div
-        :class="[!orgStore.currentOrgId ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-transparent']"
-        class="p-3 border rounded-lg cursor-pointer text-xs font-medium bg-white dark:bg-gray-900 hover:border-gray-300 transition-all"
+
+    <div class="flex flex-col gap-2">
+      <UButton
+        label="Toutes mes activités"
+        variant="ghost"
+        color="neutral"
+        icon="i-heroicons-squares-2x2"
+        :class="[!orgStore.currentOrgId ? 'bg-primary-50 dark:bg-primary-950/30 text-primary-600' : '']"
         @click="orgStore.setFocusOrg(null)"
+      />
+
+      <UButton
+        v-for="membership in orgStore.allOrgs"
+        :key="membership.id"
+        variant="ghost"
+        color="neutral"
+        class="justify-start truncate w-full"
+        :class="[orgStore.currentOrgId === membership.id ? 'bg-primary-50 dark:bg-primary-950/30 text-primary-600 font-bold' : '']"
+        @click="orgStore.setFocusOrg(membership.id)"
       >
-        Toutes mes activités
-      </div>
-      <div
-        v-for="org in orgStore.allOrgs"
-        :key="org.id"
-        :class="[orgStore.currentOrgId === org.id ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-transparent']"
-        class="p-3 border rounded-lg cursor-pointer bg-white dark:bg-gray-900 hover:border-gray-300 transition-all"
-        @click="orgStore.setFocusOrg(org.id)"
-      >
-        <p class="text-xs font-bold truncate">
-          {{ org.name }}
-        </p>
-        <p class="text-[10px] text-gray-500 uppercase">
-          {{ org.role }}
-        </p>
-      </div>
+        <div class="flex flex-col items-start overflow-hidden">
+          <span class="truncate text-sm">{{ membership.name }}</span>
+          <span class="text-[9px] uppercase opacity-60">{{ membership.role }}</span>
+        </div>
+      </UButton>
     </div>
   </section>
 </template>

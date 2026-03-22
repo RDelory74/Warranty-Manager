@@ -8,12 +8,7 @@ const showTicket = (ticket: any) => {
   isTicketModalOpen.value = true
 }
 
-// Données mockées (à mettre dans un service plus tard)
-const mockTickets = [
-  { id: 'SAV-1042', brand: 'Samsung', model: 'Galaxy S23', status: 'En cours', clientName: 'Jean Dupont', customer_code: 'CLI-8890', description: 'Écran brisé.', purchaseDate: '2023-05-12', imageUrl: 'https://via.placeholder.com/300x200' },
-  { id: 'SAV-1043', brand: 'Apple', model: 'iPhone 14', status: 'En attente', clientName: 'Entreprise XYZ', customer_code: 'PRO-1102', description: 'Batterie HS.', purchaseDate: '2022-11-04' }
-]
-
+// On récupère les memberships au montage
 onMounted(() => orgStore.fetchMemberships())
 </script>
 
@@ -24,7 +19,6 @@ onMounted(() => orgStore.fetchMemberships())
 
       <DashboardFlux
         class="col-span-12 lg:col-span-7"
-        :tickets="mockTickets"
         @select-ticket="showTicket"
       />
 

@@ -132,6 +132,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          assigned_customer_codes: string[] | null
           company_name: string | null
           customer_code: string | null
           email: string | null
@@ -140,6 +141,7 @@ export type Database = {
           role: Database['public']['Enums']['user_role']
         }
         Insert: {
+          assigned_customer_codes?: string[] | null
           company_name?: string | null
           customer_code?: string | null
           email?: string | null
@@ -148,6 +150,7 @@ export type Database = {
           role?: Database['public']['Enums']['user_role']
         }
         Update: {
+          assigned_customer_codes?: string[] | null
           company_name?: string | null
           customer_code?: string | null
           email?: string | null
