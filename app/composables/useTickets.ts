@@ -12,7 +12,7 @@ export const useTickets = () => {
 
   const tickets = ref<TicketRow[]>([])
   const isLoading = ref(false)
-  const filterStatus = ref<TicketStatus | null>(null)
+  const filterStatus = ref<any>(null)
   const filterBrand = ref('')
 
   const fetchTickets = async () => {
@@ -26,6 +26,7 @@ export const useTickets = () => {
 
     isLoading.value = true
     console.log('[useTickets] Envoi de la requête à Supabase pour User:', userId)
+    console.log('[useTickets] Valeur brute du filtre avant envoi:', filterStatus.value)
 
     try {
       let query = supabase
@@ -50,13 +51,22 @@ export const useTickets = () => {
         }
       }
 
-      // FILTRES UI
+      // --- LE FIX POUR LE FILTRE ---
       if (filterStatus.value) {
-        query = query.eq('status', filterStatus.value)
-      }
+        let statusToApply: string | null = null
 
-      if (filterBrand.value) {
-        query = query.or(`product_name.ilike.%${filterBrand.value}%,product_ref.ilike.%${filterBrand.value}%`)
+        // On vérifie si c'est un objet { label, value } ou juste une string
+        if (typeof filterStatus.value === 'object' && filterStatus.value !== null) {
+          statusToApply = filterStatus.value.value
+        } else {
+          statusToApply = filterStatus.value
+        }
+
+        // Si on a bien récupéré une string (et pas null/undefined)
+        if (statusToApply) {
+          console.log('[useTickets] Application du filtre:', statusToApply)
+          query = query.eq('status', statusToApply)
+        }
       }
 
       const { data, error } = await query
